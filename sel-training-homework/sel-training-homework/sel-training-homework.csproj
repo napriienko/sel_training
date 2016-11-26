@@ -65,6 +65,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="homework8.cs" />
     <Compile Include="homework7.cs" />
     <Compile Include="LiteCartLoginFFNightly.cs" />
     <Compile Include="LiteCartLoginFFESR45.cs" />
