@@ -65,7 +65,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="LiteCartLogin.cs" />
+    <Compile Include="homework7.cs" />
+    <Compile Include="LiteCartLoginFFNightly.cs" />
+    <Compile Include="LiteCartLoginFFESR45.cs" />
+    <Compile Include="LiteCartLoginFF.cs" />
+    <Compile Include="LiteCartLoginIE.cs" />
+    <Compile Include="LiteCartLoginChrome.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FirstTest.cs" />
   </ItemGroup>

@@ -3,12 +3,13 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 
 namespace sel_training_homework
 {
     [TestFixture]
-    public class LiteCartLogin
+    public class LiteCartLoginFF
     {
         private IWebDriver driver;
         private WebDriverWait wait;
@@ -16,12 +17,12 @@ namespace sel_training_homework
         [SetUp]
         public void start()
         {
-            driver = new ChromeDriver();
+            driver = new FirefoxDriver();
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
         }
 
         [Test]
-        public void LoginAdminPanel()
+        public void LoginAdminPanelFF()
         {
             driver.Url = "http://localhost/litecart/admin";
             driver.FindElement(By.Name("username")).SendKeys("admin");
