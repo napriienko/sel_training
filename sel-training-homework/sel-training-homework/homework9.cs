@@ -35,7 +35,10 @@ namespace sel_training_homework
             IList<IWebElement> countries = driver.FindElements(By.CssSelector(".dataTable .row"));
             //get total namber of countries rows
             int countriesNumber = driver.FindElements(By.CssSelector(".dataTable .row")).Count;
-            List<string> countryNames = new List<string>();            
+
+            List<string> countryNames = new List<string>();
+            List<string> zonesNames = new List<string>();
+
             for (int i = 0; i < countriesNumber; i++)
             {
                 countryNames.Add(countries[i].FindElement(By.CssSelector("a")).Text);
@@ -44,13 +47,13 @@ namespace sel_training_homework
                 if (zoneNumber > 0)
                 {
                     countries[i].FindElement(By.CssSelector(".fa-pencil")).Click();
-                    IList<IWebElement> zonesElements = driver.FindElements(By.CssSelector("#table-zones tr"));
-                    List<string> zonesNames = new List<string>();
+                    IList<IWebElement> zonesElements = driver.FindElements(By.CssSelector("#table-zones tr"));                   
                     for (int j = 1; j < zonesElements.Count-1; j++ )
                     {
                         zonesNames.Add(zonesElements[j].FindElement(By.CssSelector("td:nth-child(3)")).GetAttribute("textContent"));
                     }
                     CollectionAssert.IsOrdered(zonesNames);
+                    zonesNames.Clear();
                     //navigate back to countries list
                     driver.FindElement(By.CssSelector("#box-apps-menu li:nth-child(3)")).Click();
                     //get countries elements again as the page is reloaded
@@ -71,18 +74,19 @@ namespace sel_training_homework
 
             //getting all geo zones
             IList<IWebElement> zonesElement = driver.FindElements(By.CssSelector(".dataTable .row"));
-            //for each geo zone navigate to the zones page           
+            //for each geo zone navigate to the zones page 
+            List<string> zonesList = new List<string>();
             for (int i = 0; i<zonesElement.Count; i++)
             {
                 zonesElement[i].FindElement(By.CssSelector("a")).Click();
                 IList<IWebElement> zones = driver.FindElements(By.CssSelector("select[name*='zone_code'] option[selected='selected']"));
-                //check zones are sorted
-                List<string> zonesList = new List<string>();
+                //check zones are sorted                
                 foreach (IWebElement j in zones)
                 {
                     zonesList.Add(j.Text);
                 }
                 CollectionAssert.IsOrdered(zonesList);
+                zonesList.Clear();
                 //navigate back to geo zones page, is done by Cancel button                
                 driver.FindElement(By.Name("cancel")).Click();
                 //getting list of geo zones again
