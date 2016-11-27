@@ -34,40 +34,30 @@ namespace sel_training_homework
             //get all coutries rows elements
             IList<IWebElement> countries = driver.FindElements(By.CssSelector(".dataTable .row"));
             //get total namber of countries rows
-            int countriesNumber = driver.FindElements(By.CssSelector(".dataTable .row")).Count;           
-
-            for (int i=0; i < countriesNumber-1; i++)
+            int countriesNumber = driver.FindElements(By.CssSelector(".dataTable .row")).Count;
+            List<string> countryNames = new List<string>();            
+            for (int i = 0; i < countriesNumber; i++)
             {
-                //compare contry name with the next country name
-                string countryName = countries[i].FindElement(By.CssSelector("a")).Text;
-                string nextCountryName = countries[i+1].FindElement(By.CssSelector("a")).Text;
-                int compare = String.Compare(countryName, nextCountryName);
-                //if result <0 then two strings are sorted in acsending order
-                Assert.IsTrue(compare < 0);
-                //get zones
-                IWebElement zoneElement = countries[i].FindElement(By.CssSelector("td:nth-child(6)"));
-                string zonesNumber = zoneElement.Text;
-                //if it has more than o zone the navigate to zones page
-                if (Convert.ToInt32(zonesNumber) > 0)
+                countryNames.Add(countries[i].FindElement(By.CssSelector("a")).Text);
+                string zoneText = countries[i].FindElement(By.CssSelector("td:nth-child(6)")).Text;
+                int zoneNumber = Convert.ToInt32(zoneText);
+                if (zoneNumber > 0)
                 {
-                    countries[i].FindElement(By.CssSelector("a")).Click();
-                    //get all zones rows
+                    countries[i].FindElement(By.CssSelector(".fa-pencil")).Click();
                     IList<IWebElement> zonesElements = driver.FindElements(By.CssSelector("#table-zones tr"));
-                    //check they are sorted
-                    for (int j=1; j<zonesElements.Count-2; j++)
+                    List<string> zonesNames = new List<string>();
+                    for (int j = 1; j < zonesElements.Count-1; j++ )
                     {
-                        string zone = zonesElements[j].FindElement(By.CssSelector("td:nth-child(3)")).GetAttribute("textContent");
-                        string zoneNext = zonesElements[j+1].FindElement(By.CssSelector("td:nth-child(3)")).GetAttribute("textContent");
-                        Assert.IsTrue(String.Compare(zone, zoneNext) < 0);
+                        zonesNames.Add(zonesElements[j].FindElement(By.CssSelector("td:nth-child(3)")).GetAttribute("textContent"));
                     }
-                    //navigate back to the Countries list
+                    CollectionAssert.IsOrdered(zonesNames);
+                    //navigate back to countries list
                     driver.FindElement(By.CssSelector("#box-apps-menu li:nth-child(3)")).Click();
+                    //get countries elements again as the page is reloaded
+                    countries = driver.FindElements(By.CssSelector(".dataTable .row"));
                 }
-                //get again all coutries rows elements as the page is reloaded
-                countries = driver.FindElements(By.CssSelector(".dataTable .row"));
             }
- 
-            
+            CollectionAssert.IsOrdered(countryNames);
         }
 
         [Test]
@@ -81,19 +71,19 @@ namespace sel_training_homework
 
             //getting all geo zones
             IList<IWebElement> zonesElement = driver.FindElements(By.CssSelector(".dataTable .row"));
-            //for each geo zone navigate to the zones page
-            for (int i=0; i<zonesElement.Count; i++)
+            //for each geo zone navigate to the zones page           
+            for (int i = 0; i<zonesElement.Count; i++)
             {
                 zonesElement[i].FindElement(By.CssSelector("a")).Click();
                 IList<IWebElement> zones = driver.FindElements(By.CssSelector("select[name*='zone_code'] option[selected='selected']"));
                 //check zones are sorted
-                for (int j = 1; j < zones.Count - 1; j++)
+                List<string> zonesList = new List<string>();
+                foreach (IWebElement j in zones)
                 {
-                    string zone = zones[j].Text;
-                    string zoneNext = zones[j + 1].Text;
-                    Assert.IsTrue(String.Compare(zone, zoneNext) < 0);
+                    zonesList.Add(j.Text);
                 }
-                //navigate back to geo zones page, is done by Cancel button
+                CollectionAssert.IsOrdered(zonesList);
+                //navigate back to geo zones page, is done by Cancel button                
                 driver.FindElement(By.Name("cancel")).Click();
                 //getting list of geo zones again
                 zonesElement = driver.FindElements(By.CssSelector(".dataTable .row"));
